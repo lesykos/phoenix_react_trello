@@ -14,6 +14,8 @@ defmodule PhoenixTrello.User do
   @required_fields ~w(first_name last_name email password)
   @optional_fields ~w(encrypted_password)
 
+  @derive {Poison.Encode, only: [:id, :first_name, :last_name, :email]}
+
   @doc """
   Creates a changeset based on the `model` and `params`.
 
@@ -29,7 +31,7 @@ defmodule PhoenixTrello.User do
     |> unique_constraint(:email, message: "Email is already taken.")
     |> generate_encrypted_password
   end
-  
+
   defp generate_encrypted_password(current_changeset) do
     case current_changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}}
